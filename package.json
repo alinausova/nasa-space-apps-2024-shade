@@ -22,8 +22,10 @@
   },
   "dependencies": {
     "@types/geojson": "^7946.0.14",
+    "gsap": "^3.12.5",
     "mapbox-gl": "^3.7.0",
     "mapbox-gl-shadow-simulator": "^0.60.0",
-    "suncalc": "^1.9.0"
+    "suncalc": "^1.9.0",
+    "svelthree": "^0.119.0-5"
   }
 }

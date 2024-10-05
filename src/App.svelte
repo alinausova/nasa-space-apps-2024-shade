@@ -11,11 +11,11 @@
         display: flex;
         gap: 10px;
     }
+    .cube-container{
+        display: flex;
+        flex:1
+    }
 </style>
-
-<div class="overlay-buttons">
-
-</div>
 
 
 <Delhi/>
