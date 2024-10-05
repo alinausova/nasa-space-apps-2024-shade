@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import {onDestroy, onMount} from "svelte";
     import mapboxgl from "mapbox-gl";
     import geojsonPolygonsHousing from '../assets/data/delhi_housing_hexbins.json';
     import geojsonPolygonsShade from '../assets/data/delhi_12_overview_bs5_3.json';
@@ -7,20 +7,24 @@
 
     const accessToken = import.meta.env.VITE_APP_MAPBOX_TOKEN;
 
+    let map: mapboxgl.Map | null = null;
+
     onMount(() => {
         mapboxgl.accessToken = accessToken;
 
-        const map = new mapboxgl.Map({
+        map = new mapboxgl.Map({
             container: 'map',
-            // style: 'mapbox://styles/mapbox/standard/?lightPreset=dawn',
-            // style: "mapbox://styles/mapbox/standard-satellite",
             center: [77.45495972577662, 28.615176721038946],
             zoom: 12,
         });
 
+        if (!map){
+            return;
+        }
+
         map.on('style.load', () => {
-            map.setConfigProperty('basemap', 'lightPreset', 'dawn');
-            map.setLight({
+            map?.setConfigProperty('basemap', 'lightPreset', 'dawn');
+            map?.setLight({
                 anchor: 'map',
                 color: 'orange',
                 intensity: 0.9
@@ -30,12 +34,12 @@
         map.on('load', () => {
 
             // Add polygons source
-            map.addSource('geojson-polygons', {
+            map?.addSource('geojson-polygons', {
                 type: 'geojson',
                 data: geojsonPolygonsHousing as GeoJSON
             });
             // Add polygons layer
-            map.addLayer({
+            map?.addLayer({
                 id: 'polygons',
                 type: 'fill',
                 source: 'geojson-polygons',
@@ -103,6 +107,14 @@
             );
 
         });
+    });
+
+    // Cleanup function to remove the map when the component is destroyed
+    onDestroy(() => {
+        if (map) {
+            map.remove();  // Properly unmounts and removes the Mapbox map
+            map = null;
+        }
     });
 </script>
 
