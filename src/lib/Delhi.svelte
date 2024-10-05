@@ -2,7 +2,6 @@
     import {onDestroy, onMount} from "svelte";
     import mapboxgl from "mapbox-gl";
     import geojsonPolygonsHousing from '../assets/data/delhi_housing_hexbins.json';
-    import geojsonPolygonsShade from '../assets/data/delhi_12_overview_bs5_3.json';
     import geojsonURAvgShade from '../assets/data/upperright_average_shade.json';
     import geojsonULAvgShade from '../assets/data/upperleft_average_shade.json';
     import geojsonLLAvgShade from '../assets/data/lowerleft_average_shade.json';
@@ -13,6 +12,16 @@
     const accessToken = import.meta.env.VITE_APP_MAPBOX_TOKEN;
 
     let showBackdrop = true;
+
+    function toggleShowLayer(layerId: string) {
+        const visibility = map?.getLayoutProperty(layerId, 'visibility');
+        if (visibility === 'visible') {
+            map?.setLayoutProperty(layerId, 'visibility', 'none');
+        } else {
+            map?.setLayoutProperty(layerId, 'visibility', 'visible');
+        }
+    }
+
 
     let map: mapboxgl.Map | null = null;
     // center: [77.45495972577662, 28.615176721038946],
@@ -43,18 +52,27 @@
             center.lng -= distancePerSecond;
             // Smoothly animate the map over one second.
             // When this animation is complete, it calls a 'moveend' event.
-            map.easeTo({ center, duration: 1000, easing: (n) => n });
+            map.easeTo({ center, duration: 750, easing: (n) => n });
         }
     }
 
     function goToNewDelhi() {
         map?.flyTo({
             center: [77.2090, 28.6139],
-            zoom: 12,
+            zoom: 12.5,
             essential: true // this animation is considered essential with respect to prefers-reduced-motion
         });
         spinEnabled = false;
         showBackdrop = false;
+        map?.setConfigProperty('basemap', 'lightPreset', 'dawn');
+    }
+
+    function goToPalam() {
+        map?.flyTo({
+            center: [77.051711, 28.584854],
+            zoom: 13.8,
+            essential: true // this animation is considered essential with respect to prefers-reduced-motion
+        });
     }
 
     onMount(() => {
@@ -71,7 +89,7 @@
         }
 
         map.on('style.load', () => {
-            map?.setConfigProperty('basemap', 'lightPreset', 'dawn');
+            map?.setConfigProperty('basemap', 'lightPreset', 'dusk');
             map?.setLight({
                 anchor: 'map',
                 color: 'orange',
@@ -83,7 +101,7 @@
             // map?.setZoom(1)
             // spinGlobe();
 
-            setInterval(spinGlobe, 1000);
+            setInterval(spinGlobe, 750);
             // Add polygons source
             map?.addSource('geojson-polygons', {
                 type: 'geojson',
@@ -117,31 +135,6 @@
                     .setHTML(`<strong>Average Price per sqm:</strong> ${properties.avg_price_per_sqm}<br><strong>Sample Size:</strong> ${properties.sample_size}`)
                     .addTo(map);
             });
-
-
-            // map?.addSource('geojson-shade', {
-            //     type: 'geojson',
-            //     data: geojsonPolygonsShade as GeoJSON
-            // });
-            // // Add polygons layer
-            // map?.addLayer({
-            //     id: 'shade',
-            //     type: 'fill',
-            //     source: 'geojson-shade',
-            //
-            //     paint: {
-            //         // Create a blurred effect by using opacity and color interpolation
-            //         'fill-color': [
-            //             'interpolate',
-            //             ['linear'],
-            //             ['get', 'shade_fraction'],
-            //             0, '#e1e1e1',
-            //             0.01, '#7c7c7c',// Low price range
-            //             0.5, '#353535',
-            //         ],
-            //         'fill-opacity': 0.2
-            //     }
-            // });
 
             map?.addSource('geojsonURAvgShade', {
                 type: 'geojson',
@@ -274,6 +267,14 @@
         width: 100vw;
         height: 100vh; /* Adjust the height as needed */
     }
+    .overlay-toolbar {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 10000;
+        display: flex;
+        gap: 10px;
+    }
     .overlay-buttons {
         position: absolute;
         top: 10px;
@@ -297,7 +298,7 @@
     .overlay-title {
         font-size: 12rem;
         font-weight: bold;
-        color: white;
+        color: #ffde21;
     }
     .column {
         display: flex;
@@ -305,9 +306,7 @@
     }
 </style>
 
-<div class="overlay-buttons">
-    <button on:click={goToNewDelhi}>Go to New Delhi</button>
-</div>
+
 
 {#if showBackdrop}
     <div class="overlay-backdrop column">
@@ -315,6 +314,21 @@
             Heloooo
         </div>
         <button on:click={goToNewDelhi}>Go to New Delhi</button>
+    </div>
+{:else}
+    <div class="overlay-buttons">
+        <button on:click={goToNewDelhi}>Go to New Delhi</button>
+        <button on:click={goToPalam}>Go to Palam</button>
+        <button on:click={() => toggleShowLayer('polygons')}>Toggle Housing</button>
+        <button on:click={() => {
+        toggleShowLayer('shade9hur');
+        toggleShowLayer('shade9hul');
+        toggleShowLayer('shade9hlr');
+        toggleShowLayer('shade9hll');
+    }}>Toggle Shadows</button>
+        }
+        <button on:click={() => toggleShowLayer('tempLayer')}>Toggle Something Else</button>
+
     </div>
 {/if}
 
