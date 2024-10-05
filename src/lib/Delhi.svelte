@@ -52,7 +52,7 @@
             center.lng -= distancePerSecond;
             // Smoothly animate the map over one second.
             // When this animation is complete, it calls a 'moveend' event.
-            map.easeTo({ center, duration: 750, easing: (n) => n });
+            map.easeTo({ center, duration: 875, easing: (n) => n });
         }
     }
 
@@ -101,7 +101,7 @@
             // map?.setZoom(1)
             // spinGlobe();
 
-            setInterval(spinGlobe, 750);
+            setInterval(spinGlobe, 875);
             // Add polygons source
             map?.addSource('geojson-polygons', {
                 type: 'geojson',
