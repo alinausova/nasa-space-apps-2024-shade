@@ -3,15 +3,11 @@ name: Deploy static content to Pages
 
 on:
   # Runs on pushes targeting the default branch
-  
   push:
     branches: ['main']
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-env:
-  # Setting an environment variable with the value of a configuration variable
-    env_var: ${{ vars.VITE_APP_MAPBOX_TOKEN }}
 
 # Sets the GITHUB_TOKEN permissions to allow deployment to GitHub Pages
 permissions:
@@ -39,6 +35,8 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
+        env: # Or as an environment variable
+          VITE_APP_MAPBOX_TOKEN: ${{ secrets.VITE_APP_MAPBOX_TOKEN }}
       - name: Install dependencies
         run: npm ci
       - name: Build
