@@ -35,12 +35,12 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-        env: # Or as an environment variable
-          VITE_APP_MAPBOX_TOKEN: ${{ secrets.VITE_APP_MAPBOX_TOKEN }}
       - name: Install dependencies
         run: npm ci
       - name: Build
         run: npm run build
+        env: # Or as an environment variable
+          VITE_APP_MAPBOX_TOKEN: ${{ secrets.VITE_APP_MAPBOX_TOKEN }}
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
