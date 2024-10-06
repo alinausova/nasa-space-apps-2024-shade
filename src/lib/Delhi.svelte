@@ -2,10 +2,11 @@
     import {onDestroy, onMount} from "svelte";
     import mapboxgl from "mapbox-gl";
     import geojsonPolygonsHousing from '../assets/data/delhi_housing_hexbins.json';
-    // import geojsonURAvgShade from '../assets/data/upper_right_average_shade.json';
-    // import geojsonULAvgShade from '../assets/data/upper_left_average_shade.json';
-    // import geojsonLLAvgShade from '../assets/data/lower_left_average_shade.json';
-    // import geojsonLRAvgShade from '../assets/data/lower_right_average_shade.json';
+    // shade data file were to bug for the vite build so we split them into multiple files
+    import geojsonShade5 from '../assets/data/shade_results/shade_5.json';
+    import geojsonShade6 from '../assets/data/shade_results/shade_6.json';
+    import geojsonShade7 from '../assets/data/shade_results/shade_7.json';
+    import geojsonShade8 from '../assets/data/shade_results/shade_8.json';
     import geojsonWater from '../assets/data/output.json';
     import geojsonTemp from '../assets/data/lst_clipped.json';
 
@@ -15,14 +16,17 @@
 
     let showBackdrop = true;
 
+    let shadeLayers = [
+        'shade5',
+        'shade6',
+        'shade7',
+        'shade8',
+    ]
     let layerList = [
         'polygons',
-        'shade9hur',
-        'shade9hul',
-        'shade9hlr',
-        'shade9hll',
         'waterLayer',
-        'tempLayer'
+        'tempLayer',
+        ...shadeLayers
     ];
 
     function toggleShowLayer(layerId: string) {
@@ -162,108 +166,150 @@
             }
         });
 
-        // map?.addSource('geojsonURAvgShade', {
-        //     type: 'geojson',
-        //     data: geojsonURAvgShade as GeoJSON
-        // });
-        // // Add polygons layer
-        // map?.addLayer({
-        //     id: 'shade9hur',
-        //     type: 'fill',
-        //     source: 'geojsonURAvgShade',
-        //     layout: {
-        //         visibility: 'none'
-        //     },
-        //     paint: {
-        //         // Create a blurred effect by using opacity and color interpolation
-        //         'fill-color': [
-        //             'interpolate',
-        //             ['linear'],
-        //             ['get', 'avg_shade_fraction'],
-        //             0, '#e1e1e1',
-        //             0.01, '#7c7c7c',// Low price range
-        //             0.5, '#353535',
-        //         ],
-        //         'fill-opacity': 0.3
-        //     }
-        // });
-        // map?.addSource('geojsonULAvgShade', {
-        //     type: 'geojson',
-        //     data: geojsonULAvgShade as GeoJSON
-        // });
-        // // Add polygons layer
-        // map?.addLayer({
-        //     id: 'shade9hul',
-        //     type: 'fill',
-        //     source: 'geojsonULAvgShade',
-        //     layout: {
-        //         visibility: 'none'
-        //     },
-        //     paint: {
-        //         // Create a blurred effect by using opacity and color interpolation
-        //         'fill-color': [
-        //             'interpolate',
-        //             ['linear'],
-        //             ['get', 'avg_shade_fraction'],
-        //             0, '#e1e1e1',
-        //             0.01, '#7c7c7c',// Low price range
-        //             0.5, '#353535',
-        //         ],
-        //         'fill-opacity': 0.3
-        //     }
-        // });
+        // add shadow layers
+        // shadow sources
+        map?.addSource('geojsonShade5', {
+            type: 'geojson',
+            data: geojsonShade5 as GeoJSON
+        });
+        map?.addSource('geojsonShade6', {
+            type: 'geojson',
+            data: geojsonShade6 as GeoJSON
+        });
+        map?.addSource('geojsonShade7', {
+            type: 'geojson',
+            data: geojsonShade7 as GeoJSON
+        });
+        map?.addSource('geojsonShade8', {
+            type: 'geojson',
+            data: geojsonShade8 as GeoJSON
+        });
 
-        // map?.addSource('geojsonLRAvgShade', {
-        //     type: 'geojson',
-        //     data: geojsonLRAvgShade as GeoJSON
-        // });
-        // // Add polygons layer
-        // map?.addLayer({
-        //     id: 'shade9hlr',
-        //     type: 'fill',
-        //     source: 'geojsonLRAvgShade',
-        //     layout: {
-        //         visibility: 'none'
-        //     },
-        //     paint: {
-        //         // Create a blurred effect by using opacity and color interpolation
-        //         'fill-color': [
-        //             'interpolate',
-        //             ['linear'],
-        //             ['get', 'avg_shade_fraction'],
-        //             0, '#e1e1e1',
-        //             0.01, '#7c7c7c',// Low price range
-        //             0.5, '#353535',
-        //         ],
-        //         'fill-opacity': 0.3
-        //     }
-        // });
-        // map?.addSource('geojsonLLAvgShade', {
-        //     type: 'geojson',
-        //     data: geojsonLLAvgShade as GeoJSON
-        // });
-        // // Add polygons layer
-        // map?.addLayer({
-        //     id: 'shade9hll',
-        //     type: 'fill',
-        //     source: 'geojsonLLAvgShade',
-        //     layout: {
-        //         visibility: 'none'
-        //     },
-        //     paint: {
-        //         // Create a blurred effect by using opacity and color interpolation
-        //         'fill-color': [
-        //             'interpolate',
-        //             ['linear'],
-        //             ['get', 'avg_shade_fraction'],
-        //             0, '#e1e1e1',
-        //             0.01, '#7c7c7c',// Low price range
-        //             0.5, '#353535',
-        //         ],
-        //         'fill-opacity': 0.3
-        //     }
-        // });
-        //
+        // shadow layers style
+        const shadowLayerStyle = {
+            'fill-color': [
+                'interpolate',
+                ['linear'],
+                ['get', 'avg_shade_fraction'],
+                0, '#e1e1e1',
+                0.01, '#7c7c7c',// Low price range
+                0.5, '#353535',
+            ],
+            'fill-opacity': 0.3
+        }
+        // shadow layers
+        map?.addLayer({
+            id: 'shade1',
+            type: 'fill',
+            source: 'geojsonShade1',
+            layout: {
+                visibility: 'none'
+            },
+            paint: shadowLayerStyle
+        });
+        map?.addLayer({
+            id: 'shade2',
+            type: 'fill',
+            source: 'geojsonShade2',
+            layout: {
+                visibility: 'none'
+            },
+            paint: shadowLayerStyle
+        });
+
+        map?.addLayer({
+            id: 'shade5',
+            type: 'fill',
+            source: 'geojsonShade5',
+            layout: {
+                visibility: 'none'
+            },
+            paint: shadowLayerStyle
+        });
+        map?.addLayer({
+            id: 'shade6',
+            type: 'fill',
+            source: 'geojsonShade6',
+            layout: {
+                visibility: 'none'
+            },
+            paint: shadowLayerStyle
+        });
+        map?.addLayer({
+            id: 'shade7',
+            type: 'fill',
+            source: 'geojsonShade7',
+            layout: {
+                visibility: 'none'
+            },
+            paint: shadowLayerStyle
+        });
+        map?.addLayer({
+            id: 'shade8',
+            type: 'fill',
+            source: 'geojsonShade8',
+            layout: {
+                visibility: 'none'
+            },
+            paint: shadowLayerStyle
+        });
+        map?.addLayer({
+            id: 'shade9',
+            type: 'fill',
+            source: 'geojsonShade9',
+            layout: {
+                visibility: 'none'
+            },
+            paint: shadowLayerStyle
+        });
+        map?.addLayer({
+            id: 'shade10',
+            type: 'fill',
+            source: 'geojsonShade10',
+            layout: {
+                visibility: 'none'
+            },
+            paint: shadowLayerStyle
+        });
+        map?.addLayer({
+            id: 'shade11',
+            type: 'fill',
+            source: 'geojsonShade11',
+            layout: {
+                visibility: 'none'
+            },
+            paint: shadowLayerStyle
+        });
+        map?.addLayer({
+            id: 'shade12',
+            type: 'fill',
+            source: 'geojsonShade12',
+            layout: {
+                visibility: 'none'
+            },
+            paint: shadowLayerStyle
+        });
+
+        map?.addLayer({
+            id: 'shade15',
+            type: 'fill',
+            source: 'geojsonShade15',
+            layout: {
+                visibility: 'none'
+            },
+            paint: shadowLayerStyle
+        });
+        map?.addLayer({
+            id: 'shade16',
+            type: 'fill',
+            source: 'geojsonShade16',
+            layout: {
+                visibility: 'none'
+            },
+            paint: shadowLayerStyle
+        });
+
+        // impervious surfaces data
         map?.addSource('geojsonWater', {
             type: 'geojson',
             data: geojsonWater as GeoJSON
@@ -479,15 +525,13 @@
         <div class="row space-between">
             <span class="black">Shadows</span>
             <div class="row">
-                <button on:click={() => showOneLayer([
-                'shade9hur','shade9hul','shade9hlr','shade9hll'])}>
+                <button on:click={() => showOneLayer(shadeLayers)}>
                     Show
                 </button>
                 <button on:click={() => {
-                toggleShowLayer('shade9hur');
-                toggleShowLayer('shade9hul');
-                toggleShowLayer('shade9hlr');
-                toggleShowLayer('shade9hll');
+                    shadeLayers.forEach((layer) => {
+                        toggleShowLayer(layer);
+                    });
             }}>Toggle
                 </button>
             </div>
