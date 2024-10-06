@@ -441,6 +441,32 @@
     .black {
         color: #171717;
     }
+
+    .legend-bar-housing {
+        width: 100%;
+        height: 8px;
+        background: linear-gradient(to right, #680000, #ff1a1a, #ff9999, #ffcccc);
+    }
+    .legend-bar-shade {
+        width: 100%;
+        height: 8px;
+        background: linear-gradient(to right, #e1e1e1, #7c7c7c, #353535);
+    }
+    .legend-bar-water {
+        width: 100%;
+        height: 8px;
+        background: linear-gradient(to right, #9e6853, #ffee7f, #1ccaff, #005acd);
+    }
+    .legend-bar-temp {
+        width: 100%;
+        height: 8px;
+        background: linear-gradient(to right, #b8ddff, #ebff3b, #e64900, #ff0000);
+    }
+    .legend-caption {
+        font-size: 0.8rem;
+        color: #353535;
+    }
+
 </style>
 
 
@@ -460,6 +486,8 @@
                 <button on:click={() => toggleShowLayer('polygons')}>Toggle</button>
             </div>
         </div>
+        <div class="legend-bar-housing"/>
+        <div class="row space-between legend-caption"><span>Low price</span> <span>High price</span></div>
         <div class="row space-between">
             <span class="black">Shadows</span>
             <div class="row">
@@ -476,6 +504,8 @@
                 </button>
             </div>
         </div>
+        <div class="legend-bar-shade"/>
+        <div class="row space-between legend-caption"><span>Low shade</span> <span>High shade</span></div>
         <div class="row space-between">
             <span class="black">Impervious surfaces</span>
             <div class="row">
@@ -483,6 +513,8 @@
                 <button on:click={() => toggleShowLayer('waterLayer')}>Toggle</button>
             </div>
         </div>
+        <div class="legend-bar-water"/>
+        <div class="row space-between legend-caption"><span>Low impervious</span> <span>High impervious</span></div>
         <div class="row space-between">
             <span class="black">Temperature</span>
             <div class="row">
@@ -490,6 +522,8 @@
                 <button on:click={() => toggleShowLayer('tempLayer')}>Toggle</button>
             </div>
         </div>
+        <div class="legend-bar-temp"/>
+        <div class="row space-between legend-caption"><span>Low temperature</span> <span>High temperature</span></div>
         <button on:click={goToNewDelhi}>Go to New Delhi</button>
         <button on:click={goToPalam}>Go to Palam</button>
         <button on:click={addMarkers}>Show Heat Vulnerability Index Markers</button>
