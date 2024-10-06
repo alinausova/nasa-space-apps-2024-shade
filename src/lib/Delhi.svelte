@@ -2,10 +2,10 @@
     import {onDestroy, onMount} from "svelte";
     import mapboxgl from "mapbox-gl";
     import geojsonPolygonsHousing from '../assets/data/delhi_housing_hexbins.json';
-    import geojsonURAvgShade from '../assets/data/upper_right_average_shade.json';
-    import geojsonULAvgShade from '../assets/data/upper_left_average_shade.json';
-    import geojsonLLAvgShade from '../assets/data/lower_left_average_shade.json';
-    import geojsonLRAvgShade from '../assets/data/lower_right_average_shade.json';
+    // import geojsonURAvgShade from '../assets/data/upper_right_average_shade.json';
+    // import geojsonULAvgShade from '../assets/data/upper_left_average_shade.json';
+    // import geojsonLLAvgShade from '../assets/data/lower_left_average_shade.json';
+    // import geojsonLRAvgShade from '../assets/data/lower_right_average_shade.json';
     import geojsonWater from '../assets/data/output.json';
     import geojsonTemp from '../assets/data/lst_clipped.json';
 
@@ -162,115 +162,107 @@
             }
         });
 
-        // // Popup on polygons click
-        // map?.on('click', 'polygons', (e) => {
-        //     const properties = e.features[0].properties;
-        //     new mapboxgl.Popup()
-        //         .setLngLat(e.lngLat)
-        //         .setHTML(`<strong>Average Price per sqm:</strong> ${properties.avg_price_per_sqm}<br><strong>Sample Size:</strong> ${properties.sample_size}`)
-        //         .addTo(map);
+        // map?.addSource('geojsonURAvgShade', {
+        //     type: 'geojson',
+        //     data: geojsonURAvgShade as GeoJSON
+        // });
+        // // Add polygons layer
+        // map?.addLayer({
+        //     id: 'shade9hur',
+        //     type: 'fill',
+        //     source: 'geojsonURAvgShade',
+        //     layout: {
+        //         visibility: 'none'
+        //     },
+        //     paint: {
+        //         // Create a blurred effect by using opacity and color interpolation
+        //         'fill-color': [
+        //             'interpolate',
+        //             ['linear'],
+        //             ['get', 'avg_shade_fraction'],
+        //             0, '#e1e1e1',
+        //             0.01, '#7c7c7c',// Low price range
+        //             0.5, '#353535',
+        //         ],
+        //         'fill-opacity': 0.3
+        //     }
+        // });
+        // map?.addSource('geojsonULAvgShade', {
+        //     type: 'geojson',
+        //     data: geojsonULAvgShade as GeoJSON
+        // });
+        // // Add polygons layer
+        // map?.addLayer({
+        //     id: 'shade9hul',
+        //     type: 'fill',
+        //     source: 'geojsonULAvgShade',
+        //     layout: {
+        //         visibility: 'none'
+        //     },
+        //     paint: {
+        //         // Create a blurred effect by using opacity and color interpolation
+        //         'fill-color': [
+        //             'interpolate',
+        //             ['linear'],
+        //             ['get', 'avg_shade_fraction'],
+        //             0, '#e1e1e1',
+        //             0.01, '#7c7c7c',// Low price range
+        //             0.5, '#353535',
+        //         ],
+        //         'fill-opacity': 0.3
+        //     }
         // });
 
-        map?.addSource('geojsonURAvgShade', {
-            type: 'geojson',
-            data: geojsonURAvgShade as GeoJSON
-        });
-        // Add polygons layer
-        map?.addLayer({
-            id: 'shade9hur',
-            type: 'fill',
-            source: 'geojsonURAvgShade',
-            layout: {
-                visibility: 'none'
-            },
-            paint: {
-                // Create a blurred effect by using opacity and color interpolation
-                'fill-color': [
-                    'interpolate',
-                    ['linear'],
-                    ['get', 'avg_shade_fraction'],
-                    0, '#e1e1e1',
-                    0.01, '#7c7c7c',// Low price range
-                    0.5, '#353535',
-                ],
-                'fill-opacity': 0.3
-            }
-        });
-        map?.addSource('geojsonULAvgShade', {
-            type: 'geojson',
-            data: geojsonULAvgShade as GeoJSON
-        });
-        // Add polygons layer
-        map?.addLayer({
-            id: 'shade9hul',
-            type: 'fill',
-            source: 'geojsonULAvgShade',
-            layout: {
-                visibility: 'none'
-            },
-            paint: {
-                // Create a blurred effect by using opacity and color interpolation
-                'fill-color': [
-                    'interpolate',
-                    ['linear'],
-                    ['get', 'avg_shade_fraction'],
-                    0, '#e1e1e1',
-                    0.01, '#7c7c7c',// Low price range
-                    0.5, '#353535',
-                ],
-                'fill-opacity': 0.3
-            }
-        });
-        map?.addSource('geojsonLRAvgShade', {
-            type: 'geojson',
-            data: geojsonLRAvgShade as GeoJSON
-        });
-        // Add polygons layer
-        map?.addLayer({
-            id: 'shade9hlr',
-            type: 'fill',
-            source: 'geojsonLRAvgShade',
-            layout: {
-                visibility: 'none'
-            },
-            paint: {
-                // Create a blurred effect by using opacity and color interpolation
-                'fill-color': [
-                    'interpolate',
-                    ['linear'],
-                    ['get', 'avg_shade_fraction'],
-                    0, '#e1e1e1',
-                    0.01, '#7c7c7c',// Low price range
-                    0.5, '#353535',
-                ],
-                'fill-opacity': 0.3
-            }
-        });
-        map?.addSource('geojsonLLAvgShade', {
-            type: 'geojson',
-            data: geojsonLLAvgShade as GeoJSON
-        });
-        // Add polygons layer
-        map?.addLayer({
-            id: 'shade9hll',
-            type: 'fill',
-            source: 'geojsonLLAvgShade',
-            layout: {
-                visibility: 'none'
-            },
-            paint: {
-                // Create a blurred effect by using opacity and color interpolation
-                'fill-color': [
-                    'interpolate',
-                    ['linear'],
-                    ['get', 'avg_shade_fraction'],
-                    0, '#e1e1e1',
-                    0.01, '#7c7c7c',// Low price range
-                    0.5, '#353535',
-                ],
-                'fill-opacity': 0.3
-            }
-        });
+        // map?.addSource('geojsonLRAvgShade', {
+        //     type: 'geojson',
+        //     data: geojsonLRAvgShade as GeoJSON
+        // });
+        // // Add polygons layer
+        // map?.addLayer({
+        //     id: 'shade9hlr',
+        //     type: 'fill',
+        //     source: 'geojsonLRAvgShade',
+        //     layout: {
+        //         visibility: 'none'
+        //     },
+        //     paint: {
+        //         // Create a blurred effect by using opacity and color interpolation
+        //         'fill-color': [
+        //             'interpolate',
+        //             ['linear'],
+        //             ['get', 'avg_shade_fraction'],
+        //             0, '#e1e1e1',
+        //             0.01, '#7c7c7c',// Low price range
+        //             0.5, '#353535',
+        //         ],
+        //         'fill-opacity': 0.3
+        //     }
+        // });
+        // map?.addSource('geojsonLLAvgShade', {
+        //     type: 'geojson',
+        //     data: geojsonLLAvgShade as GeoJSON
+        // });
+        // // Add polygons layer
+        // map?.addLayer({
+        //     id: 'shade9hll',
+        //     type: 'fill',
+        //     source: 'geojsonLLAvgShade',
+        //     layout: {
+        //         visibility: 'none'
+        //     },
+        //     paint: {
+        //         // Create a blurred effect by using opacity and color interpolation
+        //         'fill-color': [
+        //             'interpolate',
+        //             ['linear'],
+        //             ['get', 'avg_shade_fraction'],
+        //             0, '#e1e1e1',
+        //             0.01, '#7c7c7c',// Low price range
+        //             0.5, '#353535',
+        //         ],
+        //         'fill-opacity': 0.3
+        //     }
+        // });
         //
         map?.addSource('geojsonWater', {
             type: 'geojson',
@@ -417,10 +409,6 @@
         text-transform: uppercase;
         line-height: 13rem;
         margin: 24px;
-    }
-    .overlay-subtitle {
-        font-size: 1.5rem;
-        color: #ffffff;
     }
     .column {
         display: flex;
