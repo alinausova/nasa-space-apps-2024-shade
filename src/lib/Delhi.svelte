@@ -417,14 +417,14 @@
         <div class="legend-bar-shade"/>
         <div class="row space-between legend-caption"><span>Low shade</span> <span>High shade</span></div>
         <div class="row space-between">
-            <span class="black">Impervious surfaces</span>
+            <span class="black">Built up environment</span>
             <div class="row">
                 <button on:click={() => showOneLayer(['waterLayer'])}>Show</button>
                 <button on:click={() => toggleShowLayer('waterLayer')}>Toggle</button>
             </div>
         </div>
         <div class="legend-bar-water"/>
-        <div class="row space-between legend-caption"><span>Low impervious</span> <span>High impervious</span></div>
+        <div class="row space-between legend-caption"><span>Artificial</span> <span>Natural</span> </div>
         <div class="row space-between">
             <span class="black">Temperature</span>
             <div class="row">
