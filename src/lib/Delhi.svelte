@@ -490,13 +490,6 @@
                 <button on:click={() => toggleShowLayer('tempLayer')}>Toggle</button>
             </div>
         </div>
-        <div class="row space-between">
-            <span class="black">Poverty</span>
-            <div class="row">
-                <button on:click={() => showOneLayer(['povertyLayer'])}>Show</button>
-                <button on:click={() => toggleShowLayer('povertyLayer')}>Toggle</button>
-            </div>
-        </div>
         <button on:click={goToNewDelhi}>Go to New Delhi</button>
         <button on:click={goToPalam}>Go to Palam</button>
         <button on:click={addMarkers}>Show Heat Vulnerability Index Markers</button>
