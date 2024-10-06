@@ -3,12 +3,9 @@
     import mapboxgl from "mapbox-gl";
     import geojsonPolygonsHousing from '../assets/data/delhi_housing_hexbins.json';
     // shade data file were to bug for the vite build so we split them into multiple files
-    import geojsonShade5 from '../assets/data/shade_results/shade_5.json';
-    import geojsonShade6 from '../assets/data/shade_results/shade_6.json';
-    import geojsonShade7 from '../assets/data/shade_results/shade_7.json';
-    import geojsonShade8 from '../assets/data/shade_results/shade_8.json';
+    import geojsonShade from '../assets/data/lower_left_average_shade_bs10.json';
     import geojsonWater from '../assets/data/output.json';
-    import geojsonTemp from '../assets/data/lst_clipped.json';
+    import geojsonTemp from '../assets/data/temp_clustersize_8.json';
 
     import type {GeoJSON} from "geojson"; // Polygons GeoJSON data
 
@@ -17,10 +14,7 @@
     let showBackdrop = true;
 
     let shadeLayers = [
-        'shade5',
-        'shade6',
-        'shade7',
-        'shade8',
+        'geojsonShade',
     ]
     let layerList = [
         'polygons',
@@ -168,145 +162,29 @@
 
         // add shadow layers
         // shadow sources
-        map?.addSource('geojsonShade5', {
+        map?.addSource('geojsonShade', {
             type: 'geojson',
-            data: geojsonShade5 as GeoJSON
+            data: geojsonShade as GeoJSON
         });
-        map?.addSource('geojsonShade6', {
-            type: 'geojson',
-            data: geojsonShade6 as GeoJSON
-        });
-        map?.addSource('geojsonShade7', {
-            type: 'geojson',
-            data: geojsonShade7 as GeoJSON
-        });
-        map?.addSource('geojsonShade8', {
-            type: 'geojson',
-            data: geojsonShade8 as GeoJSON
-        });
-
-        // shadow layers style
-        const shadowLayerStyle = {
-            'fill-color': [
-                'interpolate',
-                ['linear'],
-                ['get', 'avg_shade_fraction'],
-                0, '#e1e1e1',
-                0.01, '#7c7c7c',// Low price range
-                0.5, '#353535',
-            ],
-            'fill-opacity': 0.3
-        }
         // shadow layers
         map?.addLayer({
-            id: 'shade1',
+            id: 'geojsonShade',
             type: 'fill',
-            source: 'geojsonShade1',
+            source: 'geojsonShade',
             layout: {
                 visibility: 'none'
             },
-            paint: shadowLayerStyle
-        });
-        map?.addLayer({
-            id: 'shade2',
-            type: 'fill',
-            source: 'geojsonShade2',
-            layout: {
-                visibility: 'none'
-            },
-            paint: shadowLayerStyle
-        });
-
-        map?.addLayer({
-            id: 'shade5',
-            type: 'fill',
-            source: 'geojsonShade5',
-            layout: {
-                visibility: 'none'
-            },
-            paint: shadowLayerStyle
-        });
-        map?.addLayer({
-            id: 'shade6',
-            type: 'fill',
-            source: 'geojsonShade6',
-            layout: {
-                visibility: 'none'
-            },
-            paint: shadowLayerStyle
-        });
-        map?.addLayer({
-            id: 'shade7',
-            type: 'fill',
-            source: 'geojsonShade7',
-            layout: {
-                visibility: 'none'
-            },
-            paint: shadowLayerStyle
-        });
-        map?.addLayer({
-            id: 'shade8',
-            type: 'fill',
-            source: 'geojsonShade8',
-            layout: {
-                visibility: 'none'
-            },
-            paint: shadowLayerStyle
-        });
-        map?.addLayer({
-            id: 'shade9',
-            type: 'fill',
-            source: 'geojsonShade9',
-            layout: {
-                visibility: 'none'
-            },
-            paint: shadowLayerStyle
-        });
-        map?.addLayer({
-            id: 'shade10',
-            type: 'fill',
-            source: 'geojsonShade10',
-            layout: {
-                visibility: 'none'
-            },
-            paint: shadowLayerStyle
-        });
-        map?.addLayer({
-            id: 'shade11',
-            type: 'fill',
-            source: 'geojsonShade11',
-            layout: {
-                visibility: 'none'
-            },
-            paint: shadowLayerStyle
-        });
-        map?.addLayer({
-            id: 'shade12',
-            type: 'fill',
-            source: 'geojsonShade12',
-            layout: {
-                visibility: 'none'
-            },
-            paint: shadowLayerStyle
-        });
-
-        map?.addLayer({
-            id: 'shade15',
-            type: 'fill',
-            source: 'geojsonShade15',
-            layout: {
-                visibility: 'none'
-            },
-            paint: shadowLayerStyle
-        });
-        map?.addLayer({
-            id: 'shade16',
-            type: 'fill',
-            source: 'geojsonShade16',
-            layout: {
-                visibility: 'none'
-            },
-            paint: shadowLayerStyle
+            paint: {
+                'fill-color': [
+                    'interpolate',
+                    ['linear'],
+                    ['get', 'avg_shade_fraction'],
+                    0, '#e1e1e1',
+                    0.01, '#7c7c7c',// Low price range
+                    0.5, '#353535',
+                ],
+                'fill-opacity': 0.3
+            }
         });
 
         // impervious surfaces data
